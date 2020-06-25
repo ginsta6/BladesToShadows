@@ -1,18 +1,63 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public static Inventory instance;
+
+    #region Singleton
+    private void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
+    public static List<Item> inventory = new List<Item>();
+
+    public Transform slotsParent;
+    private InvenotorySlot[] slots;
+
+    private void Start()
+    {
+        slots = slotsParent.GetComponentsInChildren<InvenotorySlot>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AddItem(Item item)
     {
-        
+        inventory.Add(item);
     }
+
+    public void RemoveItem(Item item)
+    {
+        inventory.Remove(item);
+    }
+
+    public int GetCount()
+    {
+        return inventory.Count;
+    }
+
+    public void UpdateSlots()
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (i < inventory.Count)
+                slots[i].AddItem(inventory[i]);
+
+
+        }
+
+    }
+
 }

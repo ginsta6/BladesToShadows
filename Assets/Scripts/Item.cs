@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "New item", menuName = "Inventory/Item")]
-public class NewBehaviourScript : ScriptableObject
+public class Item : ScriptableObject
 {
     public string itemName;
     public Sprite icon;

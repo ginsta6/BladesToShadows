@@ -23,7 +23,7 @@ public class Coins : MonoBehaviour
     #endregion
 
 
-    public static int balance = 0;
+    public static float balance = 0;
     public Text amount;
     public Image icon;
 
@@ -32,11 +32,32 @@ public class Coins : MonoBehaviour
         amount.text = balance.ToString();
     }
 
-    public void ItemSold(int price)
+    public void ItemSold(float price)
     {
         balance += price;
+        UpdateUI();
     }
 
+    public void ItemBought(float price)
+    {
+        balance -= price;
+        UpdateUI();
+    }
+
+    public float GetBalance()
+    {
+        return balance;
+    }
+
+    private void Update()
+    {
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            balance += 500;
+            UpdateUI();
+        }
+    }
 
 
 }
