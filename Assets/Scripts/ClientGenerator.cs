@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+using System.Linq;
 
 public class ClientGenerator : MonoBehaviour
 {
@@ -29,11 +31,23 @@ public class ClientGenerator : MonoBehaviour
 
     public void Generate()
     {
-        int type = Random.Range(1, 4);   // 1 - good   2 - bad   3 - neutral
-        int imagenr = Random.Range(1, 4);
-        image.sprite = Resources.Load<Sprite>("ClientSprites/" + type.ToString() + "/" + imagenr.ToString());
-        Debug.Log("Type: " + type + "number: " + imagenr);
+        int imagenr = Random.Range(1, 16);
+        int dialogueNr = Random.Range(1, 10);
+        image.sprite = Resources.Load<Sprite>("Avatars/" + imagenr.ToString());
+        Debug.Log("Number: " + imagenr);
         //Debug.Log(Dialogue[type][imagenr]);
-        text.text = Dialogue[type - 1][imagenr - 1];
+        //text.text = Dialogue[type - 1][imagenr - 1];
+        text.text = GetDialogue(dialogueNr);
     }
+
+    public string GetDialogue(int nr)
+    {
+        string final = "";
+
+        final = File.ReadLines(Application.dataPath + "/Dialogue.txt").Skip(nr - 1).Take(1).First();
+
+
+        return final;
+    }
+
 }
