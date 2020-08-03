@@ -10,6 +10,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Vector3 start;
+    public bool InPlace = false;
 
     private void Awake()
     {
@@ -17,14 +18,27 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
+    public void ReturnToPlace()
+    {
+        rectTransform.position = start;
+        canvasGroup.alpha = 1;
+        canvasGroup.blocksRaycasts = true;
+        InPlace = false;
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         Debug.Log("PointerDown");
+        if (InPlace)
+        {
+            rectTransform.position = start;
+            InPlace = false;
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (!Drop.InPlace)
+        if (!InPlace)
         {
             Debug.Log("OnBeginDrag");
             canvasGroup.alpha = 0.6f;
@@ -38,7 +52,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         Debug.Log("OnEndDrag");
         canvasGroup.alpha = 1;
         canvasGroup.blocksRaycasts = true;
-        if (!Drop.InPlace)
+        if (!InPlace)
         {
             rectTransform.position = start;
         }
@@ -46,7 +60,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (!Drop.InPlace)
+        if (!InPlace)
         {
             Debug.Log("OnDrag");
             rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;

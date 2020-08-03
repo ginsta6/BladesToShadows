@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NewBehaviourScript
   itemName: Basic Dagger
   icon: {fileID: 21300000, guid: 4d9f2b9240026d241ade6bd514823c59, type: 3}
+  image: {fileID: 0}
   price: 100
+  type: 1

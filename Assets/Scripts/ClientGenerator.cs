@@ -7,18 +7,21 @@ using System.Linq;
 
 public class ClientGenerator : MonoBehaviour
 {
-    public Image image;
+    public Image clientSprite;
     public Text text;
-    public string[] dialogueOptions1;
-    public string[] dialogueOptions2;
-    public string[] dialogueOptions3;
-    List<string[]> Dialogue = new List<string[]>();
+    public GameObject slotOne;
+    public GameObject slotTwo;
+    private Image ImOne;
+    private Image ImTwo;
+    private int typeOne = 0;
+    private int typeTwo = 0;           //0 - none, 1 - melee, 2 - ranged, 3 - armor
+
 
     private void Start()
     {
-            Dialogue.Add(dialogueOptions1);
-            Dialogue.Add(dialogueOptions2);
-            Dialogue.Add(dialogueOptions3);
+        ImOne = slotOne.GetComponent<Image>();
+        ImTwo = slotTwo.GetComponent<Image>();
+        Generate();
     }
 
     void Update()
@@ -29,21 +32,70 @@ public class ClientGenerator : MonoBehaviour
         }
     }
 
+    public void SellToClient()
+    {
+        SellItem(slotOne, typeOne);
+        if (slotTwo.activeInHierarchy)
+        {
+            SellItem(slotTwo, typeTwo);
+        }
+
+        Inventory.instance.UpdateSlots();
+        Coins.instance.UpdateUI();
+        Generate();
+    }
+
+
+    private void SellItem(GameObject slot, int typeN)
+    {
+        if (slot.GetComponent<Drop>().InSlot == null)
+        {
+            return;
+        }
+        if (slot.GetComponent<Drop>().InSlot.type == typeN)
+        {
+            Coins.instance.ItemSold(slot.GetComponent<Drop>().InSlot.price * 1.5f);
+        }
+        else
+        {
+            Coins.instance.ItemSold(slot.GetComponent<Drop>().InSlot.price * 0.8f);
+        }
+
+        Inventory.instance.RemoveItem(slot.GetComponent<Drop>().InSlot);
+        slot.GetComponent<Drop>().ResetSlot();
+    }
+
     public void Generate()
     {
         int imagenr = Random.Range(1, 16);
         int dialogueNr = Random.Range(1, 10);
-        image.sprite = Resources.Load<Sprite>("Avatars/" + imagenr.ToString());
-        Debug.Log("Number: " + imagenr);
-        //Debug.Log(Dialogue[type][imagenr]);
-        //text.text = Dialogue[type - 1][imagenr - 1];
+        clientSprite.sprite = Resources.Load<Sprite>("Avatars/" + imagenr.ToString());
         text.text = GetDialogue(dialogueNr);
+        GenerateNeeded(Random.Range(1,3));
+
+    }
+
+    public void GenerateNeeded(int number)
+    {
+        if (number == 1)
+        {
+            slotTwo.SetActive(false);
+            typeOne = Random.Range(1, 4);
+            ImOne.sprite = Resources.Load<Sprite>("Icons/" + typeOne.ToString());
+        }
+        else
+        {
+            slotTwo.SetActive(true);
+            typeOne = Random.Range(1, 4);
+            ImOne.sprite = Resources.Load<Sprite>("Icons/" + typeOne.ToString());
+            typeTwo = Random.Range(1, 4);
+            ImTwo.sprite = Resources.Load<Sprite>("Icons/" + typeTwo.ToString());
+        }
     }
 
     public string GetDialogue(int nr)
     {
         string final = "";
-
         final = File.ReadLines(Application.dataPath + "/Dialogue.txt").Skip(nr - 1).Take(1).First();
 
 
