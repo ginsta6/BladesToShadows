@@ -23,7 +23,7 @@ public class Coins : MonoBehaviour
     #endregion
 
 
-    public static float balance = 0;
+    public static float balance = 500;
     public Text amount;
     public Image icon;
 

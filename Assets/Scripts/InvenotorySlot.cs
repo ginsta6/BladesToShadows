@@ -51,11 +51,12 @@ public class InvenotorySlot : MonoBehaviour
     public void AddItem(Item _item)
     {
         item = _item;
+        UpdateSlot();
     }
 
     public void UpdateSlot()
     {
-        image.sprite = item.icon;
+        image.sprite = item.image;
         image.color = new Color(255, 255, 255, 255);
         //text
     }

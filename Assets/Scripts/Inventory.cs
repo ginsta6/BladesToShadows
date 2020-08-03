@@ -50,14 +50,24 @@ public class Inventory : MonoBehaviour
 
     public void UpdateSlots()
     {
+        ClearSlots();
+
         for (int i = 0; i < slots.Length; i++)
         {
             if (i < inventory.Count)
+            {
                 slots[i].AddItem(inventory[i]);
+            }
 
 
         }
 
+    }
+
+    public void ClearSlots()
+    {
+        for (int i = 0; i < 7; i++)
+            slots[i].DeleteSlotItem();
     }
 
     private void Update()
