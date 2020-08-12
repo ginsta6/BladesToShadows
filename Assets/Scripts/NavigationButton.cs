@@ -12,5 +12,16 @@ public class NavigationButton : MonoBehaviour
         SceneManager.LoadScene(NextSceneName);
     }
 
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void StartButton()
+    {
+        Calendar.instance.ResetDay();
+        FindObjectOfType<AudioManager>().Play("GameLoop");
+        SceneManager.LoadScene("Supply");
+    }
 
 }

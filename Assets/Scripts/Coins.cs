@@ -35,6 +35,7 @@ public class Coins : MonoBehaviour
     public void ItemSold(float price)
     {
         balance += price;
+        FindObjectOfType<AudioManager>().Play("Sold");
         UpdateUI();
     }
 
