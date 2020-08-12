@@ -1,0 +1,12 @@
+Button click
+Start/load screen music
+Game music
+Weapon sound effects
+	mellee
+	ranged
+	armor
+footsteps
+npc murmur
+purchase/coin sound
+next round sound effect
+stamp noise for the import shop "fnish" button

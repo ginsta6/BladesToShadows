@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class ClientGenerator : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class ClientGenerator : MonoBehaviour
     private Image ImTwo;
     private int typeOne = 0;
     private int typeTwo = 0;           //0 - none, 1 - melee, 2 - ranged, 3 - armor
+    public GameObject EndScreen;
+    public Text score;
 
 
     private void Start()
@@ -34,15 +37,34 @@ public class ClientGenerator : MonoBehaviour
 
     public void SellToClient()
     {
+        
         SellItem(slotOne, typeOne);
         if (slotTwo.activeInHierarchy)
         {
             SellItem(slotTwo, typeTwo);
         }
 
-        Inventory.instance.UpdateSlots();
-        Coins.instance.UpdateUI();
-        Generate();
+
+        if (Calendar.instance.CheckWeek())
+        {
+            if (Calendar.instance.CheckGameEnd())
+            {
+                SaveManager.instance.Save();
+                EndScreen.SetActive(true);
+                score.text = "Score: " + Coins.instance.GetBalance();
+            }
+            else
+                SceneManager.LoadScene("Supply");
+        }
+        else
+        {
+            Inventory.instance.UpdateSlots();
+            Coins.instance.UpdateUI();
+            Generate();
+            Calendar.instance.AddDay();
+        }
+        
+        
     }
 
 
@@ -62,7 +84,7 @@ public class ClientGenerator : MonoBehaviour
         }
 
         Inventory.instance.RemoveItem(slot.GetComponent<Drop>().InSlot);
-        slot.GetComponent<Drop>().ResetSlot();
+        slot.GetComponent<Drop>().OnClickReturn();
     }
 
     public void Generate()

@@ -9,9 +9,15 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: dc2b93279cb2b06459c1e90ea1d332db
+  - enabled: 1
     path: Assets/Scenes/Supply.unity
     guid: 9215f59cf5ed256438a2072227ef6fcd
   - enabled: 1
     path: Assets/Scenes/Shop.unity
     guid: 6681e5ecc4e02ba42a143265d1a411c2
+  - enabled: 1
+    path: Assets/Scenes/Highscores.unity
+    guid: cb5ac7766aee5fc458aea9b45e419efd
   m_configObjects: {}

@@ -30,13 +30,6 @@ public class Drop : MonoBehaviour, IDropHandler
         }
     }
 
-    public void ResetSlot()
-    {
-        OnClickReturn();
-        InSlot = null;
-        temp = null;
-    }
-
     public void OnClickReturn()
     {
         if (InSlot != null)
@@ -45,6 +38,8 @@ public class Drop : MonoBehaviour, IDropHandler
             temp.SetActive(true);
             temp.GetComponent<DragDrop>().ReturnToPlace();
             Debug.Log(temp.GetComponent<InvenotorySlot>().item.itemName);
+            InSlot = null;
+            temp = null;
         }
     }
 }
