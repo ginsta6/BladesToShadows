@@ -60,5 +60,10 @@ public class Coins : MonoBehaviour
         }
     }
 
+    public void ResetWalet()
+    {
+        balance = 500;
+    }
+
 
 }

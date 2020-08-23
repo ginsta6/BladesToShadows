@@ -81,4 +81,9 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void ClearInventory()
+    {
+        inventory.Clear();
+    }
+
 }

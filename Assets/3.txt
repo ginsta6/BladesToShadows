@@ -1,0 +1,10 @@
+2;11;Blades, I’ll take anything.
+1;2;A bow and arrows, even spoiled, they’ll see use.
+1;3;Cheapest armor you have, brother.
+2;11;I’d prefer effective blades over fancy ones.
+1;3;Darker armor, less shine the better.
+1;2;A bow, I don’t have much time, make it quick.
+1;3;Help a cause, we need armor.
+2;11;Blades that like blood.
+1;2;A bow easy to move with, please.
+1;1;Blades worthy of a noble cause.

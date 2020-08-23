@@ -8,6 +8,24 @@ using UnityEngine.SceneManagement;
 
 public class ClientGenerator : MonoBehaviour
 {
+    public static ClientGenerator instance;
+
+    #region Singleton
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
+
     public Image clientSprite;
     public Text text;
     public GameObject slotOne;
@@ -18,12 +36,29 @@ public class ClientGenerator : MonoBehaviour
     private int typeTwo = 0;           //0 - none, 1 - melee, 2 - ranged, 3 - armor
     public GameObject EndScreen;
     public Text score;
+    public Text gameOver;
+    public int personType;
 
+    public Text[] values = new Text[3];
+    private static string[] valuesS = new string[3];
+    public Slider[] sliders = new Slider[3];
+    private static float[] slidersF = new float[3];
+
+    public void ResetSliders()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            Debug.Log(slidersF[i]);
+            slidersF[i] = 0;
+            valuesS[i] = "0";
+        }
+    }
 
     private void Start()
     {
         ImOne = slotOne.GetComponent<Image>();
         ImTwo = slotTwo.GetComponent<Image>();
+        SetSliders();
         Generate();
     }
 
@@ -35,6 +70,20 @@ public class ClientGenerator : MonoBehaviour
         }
     }
 
+    private bool CheckSlider(ref int nr)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if (slidersF[i] == 1)
+            {
+                nr = i;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void SellToClient()
     {
         
@@ -44,6 +93,26 @@ public class ClientGenerator : MonoBehaviour
             SellItem(slotTwo, typeTwo);
         }
 
+        int nr = 0;
+        if (CheckSlider(ref nr))
+        {
+            SaveManager.instance.Save();
+            EndScreen.SetActive(true);
+            score.text = " Score: " + Coins.instance.GetBalance();
+
+            switch (nr)
+            {
+                case 0:
+                    gameOver.text = "Townsfolk prevailed!";
+                    break;
+                case 1:
+                    gameOver.text = "Army prevailed!";
+                    break;
+                case 2:
+                    gameOver.text = "Rebels prevaled!";
+                    break;
+            }
+        }
 
         if (Calendar.instance.CheckWeek())
         {
@@ -52,6 +121,7 @@ public class ClientGenerator : MonoBehaviour
                 SaveManager.instance.Save();
                 EndScreen.SetActive(true);
                 score.text = "Score: " + Coins.instance.GetBalance();
+                gameOver.text = "The war is over!";
             }
             else
                 SceneManager.LoadScene("Supply");
@@ -67,6 +137,16 @@ public class ClientGenerator : MonoBehaviour
         
     }
 
+    public void SetSliders()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            Debug.Log(slidersF[i]);
+            sliders[i].value = slidersF[i];
+            values[i].text = valuesS[i];
+        }
+    }
+
 
     private void SellItem(GameObject slot, int typeN)
     {
@@ -76,12 +156,18 @@ public class ClientGenerator : MonoBehaviour
         }
         if (slot.GetComponent<Drop>().InSlot.type == typeN)
         {
-            Coins.instance.ItemSold(slot.GetComponent<Drop>().InSlot.price * 1.5f);
+            Coins.instance.ItemSold(slot.GetComponent<Drop>().InSlot.price * 1.4f);
+           
         }
         else
         {
             Coins.instance.ItemSold(slot.GetComponent<Drop>().InSlot.price * 0.8f);
         }
+
+        sliders[personType - 1].value += 0.5f;
+        slidersF[personType - 1] = sliders[personType - 1].value;
+        values[personType - 1].text = ((sliders[personType - 1].value) * 100).ToString();
+        valuesS[personType - 1] = values[personType - 1].text;
 
         Inventory.instance.RemoveItem(slot.GetComponent<Drop>().InSlot);
         slot.GetComponent<Drop>().OnClickReturn();
@@ -90,38 +176,42 @@ public class ClientGenerator : MonoBehaviour
     public void Generate()
     {
         int imagenr = Random.Range(1, 16);
-        int dialogueNr = Random.Range(1, 10);
+        personType = Random.Range(1, 4);
+        int dialogueNr = Random.Range(1, 11);
         clientSprite.sprite = Resources.Load<Sprite>("Avatars/" + imagenr.ToString());
-        text.text = GetDialogue(dialogueNr);
-        GenerateNeeded(Random.Range(1,3));
+        GetDialogue(dialogueNr, personType);
 
     }
 
-    public void GenerateNeeded(int number)
+    public void GenerateNeeded(int number, string needed)
     {
         if (number == 1)
         {
             slotTwo.SetActive(false);
-            typeOne = Random.Range(1, 4);
+            typeOne = int.Parse(needed);
             ImOne.sprite = Resources.Load<Sprite>("Icons/" + typeOne.ToString());
         }
         else
         {
             slotTwo.SetActive(true);
-            typeOne = Random.Range(1, 4);
+            typeOne = int.Parse(needed[0].ToString());
             ImOne.sprite = Resources.Load<Sprite>("Icons/" + typeOne.ToString());
-            typeTwo = Random.Range(1, 4);
+            typeTwo = int.Parse(needed[1].ToString());
             ImTwo.sprite = Resources.Load<Sprite>("Icons/" + typeTwo.ToString());
         }
     }
 
-    public string GetDialogue(int nr)
+    public void GetDialogue(int nr, int type)
     {
-        string final = "";
-        final = File.ReadLines(Application.dataPath + "/Dialogue.txt").Skip(nr - 1).Take(1).First();
+        string Final = File.ReadLines(Application.dataPath + "/" + type + ".txt").Skip(nr - 1).Take(1).First();
 
+        string[] split = Final.Split(';');
+        Final = split[2];
+        string Amount = split[0];
+        string Needed = split[1];
+        text.text = Final;
+        GenerateNeeded(int.Parse(Amount), Needed);
 
-        return final;
     }
 
 }

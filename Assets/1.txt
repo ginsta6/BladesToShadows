@@ -1,0 +1,10 @@
+1;1;Could I have a kitchen knife?
+1;2;I need something to hunt with.
+2;11;Two knives would be great.
+1;1;Please, I just need a pointy thing to defend myself with.
+1;3;P-p-please I want an armor peace.
+1;2;Bow broke on the last hunt. Need to feed the family.
+2;13;Hard times for the common-folk. Need something to defend oneself with.
+1;1;My last blade broke, I’ll feel safer when I’ll have a new one.
+1;3;Needs armor, nothing fancy.
+1;3;Armor. Something I can hide under all these clothes.
