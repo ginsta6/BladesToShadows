@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: Short Sword
   icon: {fileID: 21300000, guid: 60e6eded57565c64d95d78043920d424, type: 3}
   image: {fileID: 21300000, guid: 466dffb4d1cac7646ac5d35403b0a574, type: 3}
-  price: 270
+  price: 120
   type: 1

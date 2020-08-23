@@ -20,6 +20,9 @@ public class NavigationButton : MonoBehaviour
     public void StartButton()
     {
         Calendar.instance.ResetDay();
+        Coins.instance.ResetWalet();
+        ClientGenerator.instance.ResetSliders();
+        Inventory.instance.ClearInventory();
         FindObjectOfType<AudioManager>().Play("GameLoop");
         SceneManager.LoadScene("Supply");
     }
