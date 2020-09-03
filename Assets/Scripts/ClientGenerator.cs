@@ -34,6 +34,7 @@ public class ClientGenerator : MonoBehaviour
     private Image ImTwo;
     private int typeOne = 0;
     private int typeTwo = 0;           //0 - none, 1 - melee, 2 - ranged, 3 - armor
+    private bool Magic;
     public GameObject EndScreen;
     public Text score;
     public Text gameOver;
@@ -43,6 +44,12 @@ public class ClientGenerator : MonoBehaviour
     private static string[] valuesS = new string[3];
     public Slider[] sliders = new Slider[3];
     private static float[] slidersF = new float[3];
+
+    //Odds
+    static int safe;
+    static int narc;
+    static int bad;
+
 
     public void ResetSliders()
     {
@@ -56,6 +63,7 @@ public class ClientGenerator : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log(safe + " " + narc + " " + bad);
         ImOne = slotOne.GetComponent<Image>();
         ImTwo = slotTwo.GetComponent<Image>();
         SetSliders();
@@ -67,6 +75,10 @@ public class ClientGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             Generate();
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Debug.Log(Magic);
         }
     }
 
@@ -84,15 +96,79 @@ public class ClientGenerator : MonoBehaviour
         return false;
     }
 
-    public void SellToClient()
+    public void SellToClient() //separate in different methods, maybe stops not working randomly
     {
-        
-        SellItem(slotOne, typeOne);
-        if (slotTwo.activeInHierarchy)
+        //Slider adjustment
+
+        if ((slotOne.GetComponent<Drop>().InSlot != null) || (slotTwo.GetComponent<Drop>().InSlot != null))
         {
-            SellItem(slotTwo, typeTwo);
+            sliders[personType - 1].value += 0.1f;
+            slidersF[personType - 1] = sliders[personType - 1].value;
+            values[personType - 1].text = ((sliders[personType - 1].value) * 100).ToString();
+            valuesS[personType - 1] = values[personType - 1].text;
         }
 
+        //Magic item checking
+
+        if ((slotOne.GetComponent<Drop>().InSlot != null) || (slotTwo.GetComponent<Drop>().InSlot != null))
+        {
+            if (((slotOne.GetComponent<Drop>().InSlot != null) && (slotOne.GetComponent<Drop>().InSlot.magic)) || ((slotTwo.GetComponent<Drop>().InSlot != null) && (slotTwo.GetComponent<Drop>().InSlot.magic)))
+            {
+                if (Magic) //Wants magic item
+                {
+                    SellItem(slotOne, typeOne);
+                    if (slotTwo.activeInHierarchy)
+                    {
+                        SellItem(slotTwo, typeTwo);
+                    }
+                }
+                else
+                {
+                    int rolled = RollDice(safe, narc, bad);
+                    Debug.Log("Rolled: " + rolled);
+                    switch (rolled)
+                    {
+                        case 1:
+                            SellItem(slotOne, typeOne);
+                            if (slotTwo.activeInHierarchy)
+                            {
+                                SellItem(slotTwo, typeTwo);
+                            }
+                            break;
+                        case 2:
+                            ChangeOdds(true);
+                            NarcTimer.instance.SetTimer();
+                            NarcTimer.instance.UpdateUI();
+                            SellItem(slotOne, typeOne);
+                            if (slotTwo.activeInHierarchy)
+                            {
+                                SellItem(slotTwo, typeTwo);
+                            }
+                            break;
+                        case 3:
+                            Debug.Log("YE FOHKED OHP MATE");
+                            SellItem(slotOne, typeOne);
+                            if (slotTwo.activeInHierarchy)
+                            {
+                                SellItem(slotTwo, typeTwo);
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            SellItem(slotOne, typeOne);
+            if (slotTwo.activeInHierarchy)
+            {
+                SellItem(slotTwo, typeTwo);
+            }
+        }
+
+
+        ////Win conditions
+        //Sliders
         int nr = 0;
         if (CheckSlider(ref nr))
         {
@@ -113,7 +189,8 @@ public class ClientGenerator : MonoBehaviour
                     break;
             }
         }
-
+        //
+        //Calendar
         if (Calendar.instance.CheckWeek())
         {
             if (Calendar.instance.CheckGameEnd())
@@ -141,7 +218,6 @@ public class ClientGenerator : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            Debug.Log(slidersF[i]);
             sliders[i].value = slidersF[i];
             values[i].text = valuesS[i];
         }
@@ -164,11 +240,6 @@ public class ClientGenerator : MonoBehaviour
             Coins.instance.ItemSold(slot.GetComponent<Drop>().InSlot.price * 0.8f);
         }
 
-        sliders[personType - 1].value += 0.5f;
-        slidersF[personType - 1] = sliders[personType - 1].value;
-        values[personType - 1].text = ((sliders[personType - 1].value) * 100).ToString();
-        valuesS[personType - 1] = values[personType - 1].text;
-
         Inventory.instance.RemoveItem(slot.GetComponent<Drop>().InSlot);
         slot.GetComponent<Drop>().OnClickReturn();
     }
@@ -177,7 +248,7 @@ public class ClientGenerator : MonoBehaviour
     {
         int imagenr = Random.Range(1, 16);
         personType = Random.Range(1, 4);
-        int dialogueNr = Random.Range(1, 11);
+        int dialogueNr = Random.Range(1, 14);
         clientSprite.sprite = Resources.Load<Sprite>("Avatars/" + imagenr.ToString());
         GetDialogue(dialogueNr, personType);
 
@@ -206,12 +277,44 @@ public class ClientGenerator : MonoBehaviour
         string Final = File.ReadLines(Application.dataPath + "/" + type + ".txt").Skip(nr - 1).Take(1).First();
 
         string[] split = Final.Split(';');
-        Final = split[2];
-        string Amount = split[0];
-        string Needed = split[1];
+        Final = split[3];
+        string Amount = split[1];
+        string Needed = split[2];
+        Magic = bool.Parse(split[0]);
         text.text = Final;
         GenerateNeeded(int.Parse(Amount), Needed);
 
+    }
+
+    private int RollDice(int safe, int narc, int bad)
+    {
+        int dice = Random.Range(0, 101);
+        Debug.Log("Dice: " + dice);
+
+        if (dice <= safe)
+            return 1;
+        if ((dice > safe) && (dice <= safe + narc))
+            return 2;
+        if (dice > safe + narc)
+            return 3;
+
+        return 0;
+    }
+
+    public void ChangeOdds(bool narcOdds)
+    {
+        if (narcOdds)
+        {
+            narc = 20;
+            bad = 50;
+        }
+        else
+        {
+            safe = 30;
+            narc = 60;
+            bad = 10;
+        }
+        Debug.Log(safe + " " + narc + " " + bad);
     }
 
 }

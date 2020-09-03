@@ -1,10 +1,13 @@
-1;1;A blade, now!
-1;2;Best ranged weapon you have.
-1;1;Blade, merchant.
-1;3;Good armor, and don’t try to trick me, I know my way around metalwork.
-1;1;Shortswords, longswords, show them.
-1;2;A longbow – 15 lb minimum.
-1;2;A bow.
-1;3;Armor, and make it fast, merhcant.
-1;2;Arrows, well fletched and oiled.
-1;3;Armor, merchant. Did you not hear me?
+false;1;1;A blade, now!
+false;1;2;Best ranged weapon you have.
+false;1;1;Blade, merchant.
+false;1;3;Good armor, and don’t try to trick me, I know my way around metalwork.
+false;1;1;Shortswords, longswords, show them.
+false;1;2;A longbow – 15 lb minimum.
+false;1;2;A bow.
+false;1;3;Armor, and make it fast, merhcant.
+false;1;2;Arrows, well fletched and oiled.
+false;1;3;Armor, merchant. Did you not hear me?\
+true;1;1;MAGIC SWORD BITCH
+true;1;2;MAGIC BOW NAHUI
+true;1;3;GIVE ARMOR MAGIC STRONK BLED

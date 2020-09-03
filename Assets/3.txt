@@ -1,10 +1,13 @@
-2;11;Blades, I’ll take anything.
-1;2;A bow and arrows, even spoiled, they’ll see use.
-1;3;Cheapest armor you have, brother.
-2;11;I’d prefer effective blades over fancy ones.
-1;3;Darker armor, less shine the better.
-1;2;A bow, I don’t have much time, make it quick.
-1;3;Help a cause, we need armor.
-2;11;Blades that like blood.
-1;2;A bow easy to move with, please.
-1;1;Blades worthy of a noble cause.
+false;2;11;Blades, I’ll take anything.
+false;1;2;A bow and arrows, even spoiled, they’ll see use.
+false;1;3;Cheapest armor you have, brother.
+false;2;11;I’d prefer effective blades over fancy ones.
+false;1;3;Darker armor, less shine the better.
+false;1;2;A bow, I don’t have much time, make it quick.
+false;1;3;Help a cause, we need armor.
+false;2;11;Blades that like blood.
+false;1;2;A bow easy to move with, please.
+false;1;1;Blades worthy of a noble cause.
+true;1;1;MAGIC SWORD BITCH
+true;1;2;MAGIC BOW NAHUI
+true;1;3;GIVE ARMOR MAGIC STRONK BLED
