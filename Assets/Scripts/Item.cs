@@ -11,6 +11,7 @@ public class Item : ScriptableObject
     public Sprite image;
     public int price;
     public int type;
+    public bool magic;
 
 
 }

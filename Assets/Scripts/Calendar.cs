@@ -23,7 +23,7 @@ public class Calendar : MonoBehaviour
     #endregion
 
     public Text information;
-    private int limit = 20;      //Game end limit i.e. total days
+    private int limit = 27;      //Game end limit i.e. total days
     private static int currentday = -1;
 
     private void Start()
@@ -35,6 +35,7 @@ public class Calendar : MonoBehaviour
     public void AddDay()
     {
         currentday++;
+        NarcTimer.instance.Subtract();
         UpdateUI();
 
     }
