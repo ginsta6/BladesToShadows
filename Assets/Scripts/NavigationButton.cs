@@ -22,7 +22,7 @@ public class NavigationButton : MonoBehaviour
         GameStartManager.GameStart = 2;
 
         FindObjectOfType<AudioManager>().Play("GameLoop");
-        SceneManager.LoadScene("Supply");
+        SceneManager.LoadScene("Loading");
     }
 
 }

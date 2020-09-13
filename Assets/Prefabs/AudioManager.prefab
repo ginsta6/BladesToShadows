@@ -43,16 +43,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b0270a901d4a04087b28e29f17c260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  music: {fileID: 551796409568366541, guid: 10fd379dbe1468e4dafe5020340c8392, type: 2}
+  sound: {fileID: 9066243603793070443, guid: 10fd379dbe1468e4dafe5020340c8392, type: 2}
   sounds:
   - name: Sold
     clip: {fileID: 8300000, guid: b150d9f3318ff9d48a07fbc22862a547, type: 3}
     volume: 1
     pitch: 1
     loop: 0
+    music: 0
     source: {fileID: 0}
   - name: GameLoop
     clip: {fileID: 8300000, guid: 67371e06baebd1a4abb2efbe6272d72b, type: 3}
     volume: 0.3
     pitch: 1
     loop: 1
+    music: 1
     source: {fileID: 0}
