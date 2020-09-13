@@ -96,6 +96,7 @@ public class ClientGenerator : MonoBehaviour
         return false;
     }
 
+
     public void SellToClient() //separate in different methods, maybe stops not working randomly
     {
         //Slider adjustment
@@ -116,6 +117,7 @@ public class ClientGenerator : MonoBehaviour
             {
                 if (Magic) //Wants magic item
                 {
+                    Debug.Log("Wanted Magic");
                     SellItem(slotOne, typeOne);
                     if (slotTwo.activeInHierarchy)
                     {
@@ -156,15 +158,16 @@ public class ClientGenerator : MonoBehaviour
                     }
                 }
             }
-        }
-        else
-        {
-            SellItem(slotOne, typeOne);
-            if (slotTwo.activeInHierarchy)
+            else
             {
-                SellItem(slotTwo, typeTwo);
+                SellItem(slotOne, typeOne);
+                if (slotTwo.activeInHierarchy)
+                {
+                    SellItem(slotTwo, typeTwo);
+                }
             }
         }
+       
 
 
         ////Win conditions
@@ -242,6 +245,7 @@ public class ClientGenerator : MonoBehaviour
 
         Inventory.instance.RemoveItem(slot.GetComponent<Drop>().InSlot);
         slot.GetComponent<Drop>().OnClickReturn();
+        Debug.Log("Item sold");
     }
 
     public void Generate()

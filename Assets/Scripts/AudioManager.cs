@@ -1,11 +1,14 @@
 ﻿using UnityEngine.Audio;
 using System;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
 
     public static AudioManager instance;
+    public AudioMixerGroup music;
+    public AudioMixerGroup sound;
 
 
     public Sound[] sounds;
@@ -26,6 +29,9 @@ public class AudioManager : MonoBehaviour
         foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
+            if (s.music)
+                s.source.outputAudioMixerGroup = music;
+            else s.source.outputAudioMixerGroup = sound;
             s.source.clip = s.clip;
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
